@@ -1,5 +1,112 @@
 Модуль, отвечающий за реализацию сдвигового шифра:
+#include "cesar.h"
+#include <iostream> 
+#include <string> 
+#include <cctype> 
+using namespace std;
 
+Cesar::Cesar(const unsigned int _key) :key(_key)
+{
+	if (key >= alph || key == 0)
+	{
+		throw 1;
+	}
+
+}
+
+string Cesar::Preparation_For_Encript(string m)
+{
+	string M;
+	for (auto c : m)
+	{
+		if ((c >= 'А') && (c <= 'я') | (c <= 'Ё') | (c <= 'ё'))
+		{
+			throw 2;
+		}
+		else
+			if (islower(c))
+			{
+				M += toupper(c);
+			}
+			else if (isupper(c))
+			{
+				M += c;
+			}
+
+			else if (isspace(c) || ispunct(c))
+			{
+				continue;
+			}
+
+			else
+			{
+				throw 2;
+
+			}
+
+	}
+	return M;
+}
+
+string Cesar::Shift_For_Encript(string M)
+{
+	M = Preparation_For_Encript(m);
+	string res;
+	int a = alph;
+	int i = 0;
+	for (auto c : M)
+	{
+		if (c + key <= 'Z')
+		{
+			res += c + key;
+		}
+		else
+		{
+			res += c - (a - key);
+		}
+		i++;
+	}
+	return string(res);
+}
+
+string Cesar::Before_Decription(string m)
+{
+	string M;
+	for (auto c : m)
+	{
+		if (isupper(c))
+		{
+			M += c;
+		}
+		else
+		{
+			throw 3;
+		}
+
+	}
+	return M;
+}
+
+string Cesar::Shift_For_Decript(string M)
+{
+	M = Before_Decription(m);
+	string res;
+	int a = alph;
+	int i = 0;
+	for (auto c : M)
+	{
+		if (c - key >= 'A')
+		{
+			res += c - key;
+		}
+		else
+		{
+			res += c + (a - key);
+		}
+		i++;
+	}
+	return string(res);
+}
 Заголовочный модуль:
 #pragma once
 #include <string> 
